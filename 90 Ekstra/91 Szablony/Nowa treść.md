@@ -1,0 +1,5 @@
+---
+tags:
+  - output/artykuł
+dotyczy:
+---

@@ -1,0 +1,14 @@
+{
+  "insert-template": [
+    { "modifiers": ["Alt", "Mod"], "key": "S" }
+  ],
+  "daily-notes": [
+    { "modifiers": ["Mod", "Shift"], "key": "D" }
+  ],
+  "app:go-back": [
+    { "modifiers": ["Mod"], "key": "[" }
+  ],
+  "app:go-forward": [
+    { "modifiers": ["Mod"], "key": "]" }
+  ]
+}

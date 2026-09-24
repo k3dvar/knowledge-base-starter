@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "0.1.0",
+  "name": "99 Raw",
+  "behavior": "create",
+  "noteContentFormat": "{{content}}",
+  "properties": [
+    { "name": "tags", "value": "input/raw", "type": "multitext" },
+    { "name": "tytuł oryginalny", "value": "{{title}}", "type": "text" },
+    { "name": "author", "value": "{{author|split:\", \"|wikilink|join}}", "type": "multitext" },
+    { "name": "link", "value": "{{url}}", "type": "text" },
+    { "name": "published", "value": "{{published}}", "type": "date" }
+  ],
+  "triggers": [],
+  "noteNameFormat": "{{title|safe_name}}",
+  "path": "99 Raw"
+}

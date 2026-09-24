@@ -1,0 +1,19 @@
+{
+  "defaultViewMode": "preview",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "10 Notatki",
+  "attachmentFolderPath": "90 Ekstra/92 Pliki",
+  "alwaysUpdateLinks": true,
+  "pdfExportSettings": {
+    "pageSize": "A4",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "promptDelete": true,
+  "openBehavior": "",
+  "showUnsupportedFiles": true,
+  "userIgnoreFilters": [
+    "99 Raw/"
+  ]
+}

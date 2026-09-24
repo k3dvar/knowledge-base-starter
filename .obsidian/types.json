@@ -1,0 +1,13 @@
+{
+  "types": {
+    "aliases": "multitext",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "autor": "multitext",
+    "dotyczy": "multitext",
+    "źródło": "multitext",
+    "status": "multitext",
+    "uczestnicy": "multitext",
+    "data": "date"
+  }
+}

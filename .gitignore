@@ -1,0 +1,13 @@
+# Obsidian per-device state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# Claude Code per-user settings
+.claude/settings.local.json
+.claude/backups/
+.claude/scheduled_tasks.lock
+
+# OS
+.DS_Store
