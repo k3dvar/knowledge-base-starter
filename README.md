@@ -51,6 +51,7 @@ knowledge-brain-starter/
 ├── README.md
 ├── .claude/
 │   ├── settings.json          # włącza plugin obsidian@obsidian-skills
+│   ├── agents/                # agenci, którym skille zlecają kroki (tabela niżej)
 │   └── skills/                # skille vaultu (tabela niżej)
 ├── .obsidian/                 # konfiguracja i pluginy społecznościowe
 ├── 00 Planer/01 Dziennik/     # notatki dzienne i poranne strony
@@ -80,6 +81,22 @@ knowledge-brain-starter/
 | `/evening-review` | Wieczorny przegląd dziennika, zadania do Todoist i linkowanie. | połączenie z Todoist |
 
 Dwa ostatnie skille są opcjonalne. Bez połączeń z Google Calendar i Todoist po prostu zgłoszą brak integracji. Jeśli ich nie potrzebujesz, usuń ich katalogi z `.claude/skills/`.
+
+### Agenci
+
+Skille zlecają ciężkie, powtarzalne kroki wyspecjalizowanym agentom z `.claude/agents/`. Dzięki temu przy wielu klipach, źródłach albo dniach praca idzie równolegle, a każdy krok dostaje model dopasowany do tego, ile wymaga osądu. Przy jednej notatce albo drobnej prośbie skill wykonuje krok sam, więc agenci przyspieszają pracę, ale nie są do niej wymagani.
+
+| Agent | Model | Co robi |
+|---|---|---|
+| `VaultExplorer` | Haiku | Sprawdza bez zmian w vaulcie, czy źródło, pojęcie albo zettel już istnieje, także pod aliasem. |
+| `SourceWriter` | Sonnet | Pisze notatkę źródłową z surowego materiału według szablonu. |
+| `StoryQuoteExtractor` | Sonnet | Wyodrębnia historie i rzeczywiste cytaty do notatek Story i Cytat. |
+| `ConceptLinker` | Sonnet | Wykonuje `/link-concepts` i zakłada brakujące notatki pojęć, osób i firm. |
+| `ZettelCurator` | Opus | Prowadzi bramkę akceptacji zettli i semantycznie wykrywa duplikaty oraz kontrargumenty. |
+| `JournalAnalyst` | Sonnet | Analizuje jeden dzień dziennika dla `/evening-review` i tylko proponuje zmiany. |
+| `VaultAuditor` | Opus | Ocenia duplikaty i antytezy zettli dla jednej grupy obszarów w `/audit-vault`. |
+
+Zasady delegowania i równoległości opisuje sekcja „Agenci vaultu” w `CLAUDE.md`.
 
 ### Pluginy Obsidiana
 
