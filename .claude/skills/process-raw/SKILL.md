@@ -19,6 +19,29 @@ prawdy dla tagów, frontmattera i linkowania.
 Automatycznie powstają źródła, Story i Cytaty. Akceptacji wymagają wyłącznie zettle i nowe
 pytania w MOC.
 
+## Agenci i równoległość
+
+Ten skill deleguje ciężkie kroki do wyspecjalizowanych agentów (`.claude/agents/`), żeby przy
+kilku klipach naraz mogły iść równolegle, zamiast wykonywać wszystko po kolei w jednej sesji:
+
+- **Krok 1** (sprawdzenie duplikatu źródła) deleguj do `VaultExplorer`.
+- **Krok 3** (notatka źródłowa) deleguj do `SourceWriter`.
+- **Krok 5** (Story/Cytaty) deleguj do `StoryQuoteExtractor`.
+- **Krok 6** (linkowanie) deleguj do `ConceptLinker`.
+- **Krok 7** (zettle) deleguj do `ZettelCurator`.
+
+**Przy wielu klipach**: uruchom `VaultExplorer` dla wszystkich klipów naraz, w jednej
+wiadomości (po jednym wywołaniu `Agent` na klip). Dla klipów bez istniejącego źródła uruchom
+`SourceWriter` dla wszystkich równolegle — to niezależne pliki. Dla każdego źródła z osobna
+`StoryQuoteExtractor` i `ConceptLinker` mogą iść równolegle **między klipami**, ale w obrębie
+jednego klipu zachowaj kolejność: `ConceptLinker` skanuje gotową treść, więc czeka na swój
+`StoryQuoteExtractor`. `ZettelCurator` uruchamiaj **sekwencyjnie**, jeden klip po drugim —
+operuje na współdzielonym stanie (`Moje 12 Problemów`, baza zettli), więc równoległe wywołania
+mogłyby przeoczyć nawzajem swoje duplikaty albo nadpisać MOC.
+
+**Przy jednym klipie** albo gdy delegacja nie daje przewagi, wykonaj krok inline, zgodnie
+z opisem niżej — agenci przyspieszają pracę, ale nie są obowiązkowe dla każdego wywołania.
+
 ## Krok 0 — Znajdź nieprzetworzone klipy
 
 Klip jest nieprzetworzony, gdy nie ma właściwości `przetworzone:`:
@@ -39,6 +62,9 @@ to samo źródło.
 
 Jeśli źródło istnieje, uzupełnij tylko `przetworzone:` w klipie (Krok 4) i pomiń jego obróbkę.
 Nigdy nie twórz kopii z innym tytułem ani numerem.
+
+Przy wielu klipach zleć ten krok agentowi `VaultExplorer` dla wszystkich naraz (patrz „Agenci
+i równoległość").
 
 ## Krok 2 — Wczytaj klip i rozpoznaj typ
 
@@ -81,6 +107,10 @@ własnymi. Przykład: „How Claude Code is used in practice" daje plik
 obsidian create path="10 Notatki/<Tytuł>.md" silent content="..."
 ```
 
+Zleć napisanie treści agentowi `SourceWriter`, przekazując rozpoznany typ, szablon i pełny
+tekst klipu — on sam dopyta `VaultExplorer` o duplikat przed zapisem. Przy wielu nowych
+źródłach uruchom `SourceWriter` dla wszystkich równolegle.
+
 ## Krok 4 — Zepnij klip z notatką
 
 ```bash
@@ -91,19 +121,23 @@ Klip zostaje w `99 Raw/` jako archiwum. Usuń go tylko na wyraźną prośbę.
 
 ## Krok 5 — Wyodrębnij Story i Cytaty
 
-Wykonaj procedurę z [stories-and-quotes.md](references/stories-and-quotes.md), przekazując
-notatkę źródłową i pełny tekst klipu. Brak historii albo cytatów jest poprawnym wynikiem.
+Zleć to agentowi `StoryQuoteExtractor`, przekazując notatkę źródłową i pełny tekst klipu —
+wykonuje procedurę z [stories-and-quotes.md](references/stories-and-quotes.md) samodzielnie.
+Brak historii albo cytatów jest poprawnym wynikiem. Przy wielu klipach uruchom go równolegle
+dla każdego źródła.
 
 ## Krok 6 — Dolinkuj zapisane materiały
 
-Wywołaj `/link-concepts` na wszystkich źródłach z tego przebiegu oraz na utworzonych lub
-uzupełnionych Story i Cytatach. Zrób to przed pokazaniem tabeli zettli, żeby zapisane
-materiały były kompletne niezależnie od decyzji o zettlach.
+Zleć to agentowi `ConceptLinker`, na wszystkich źródłach z tego przebiegu oraz na utworzonych
+lub uzupełnionych Story i Cytatach. Zrób to przed pokazaniem tabeli zettli, żeby zapisane
+materiały były kompletne niezależnie od decyzji o zettlach. W obrębie jednego klipu uruchom go
+dopiero po `StoryQuoteExtractor` (patrz „Agenci i równoległość").
 
 ## Krok 7 — Zaproponuj zettle
 
-Wywołaj `/make-zettels <Tytuł notatki>` osobno dla każdego źródła i pokaż tabele łącznie.
-Po akceptacji `/make-zettels` sam zapisuje i dolinkowuje zettle.
+Zleć to agentowi `ZettelCurator`, osobno dla każdego źródła, **sekwencyjnie** (patrz „Agenci
+i równoległość"), i pokaż tabele łącznie. Po akceptacji `ZettelCurator` sam zapisuje
+i dolinkowuje zettle.
 
 ## Tryb archiwum: uzupełnij wcześniej przetworzone materiały
 

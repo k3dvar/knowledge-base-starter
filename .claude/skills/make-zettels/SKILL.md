@@ -16,6 +16,13 @@ Skill realizuje bramkę akceptacji zettli z `CLAUDE.md` (sekcja „Nowy zettel")
 źródłem prawdy dla frontmattera, głosu i linkowania. Zettel to **jedyny** typ notatki
 linkujący do pytań z `[[Moje 12 Problemów]]`, dlatego każda teza przechodzi tę samą bramkę.
 
+**Delegacja.** Gdy ten krok woła inny skill (`process-raw`, `process-book`) albo gdy obsługujesz
+kilka źródeł naraz, zleć każde wywołanie agentowi `ZettelCurator` (`.claude/agents/ZettelCurator.md`)
+zamiast prowadzić poniższe kroki w głównej sesji. Przy wielu źródłach uruchamiaj go
+**sekwencyjnie**, jedno źródło po drugim — operuje na współdzielonym stanie (MOC, baza zettli),
+więc równoległe wywołania mogłyby przeoczyć nawzajem swoje duplikaty. Przy bezpośredniej prośbie
+użytkownika o zettle z jednej notatki możesz wykonać kroki inline.
+
 ## Wejście
 
 - **Notatka w vaulcie** (źródło albo pojęcie). Wczytaj ją w całości i wypisz kandydatów na

@@ -193,6 +193,31 @@ Jeśli zmienisz taksonomię, zaktualizuj też listę `TAXONOMY` w `.claude/skill
 
 Konwencje opisuje ten plik, a skille opisują tylko przepływ.
 
+## Agenci vaultu (`.claude/agents/`)
+
+Ciężkie, powtarzalne kroki skilli **delegujesz do wyspecjalizowanych agentów** zamiast wykonywać je sam w głównej sesji, żeby przy wielu klipach, źródłach albo dniach mogły iść **równolegle**, i żeby każdy krok dostał model dopasowany do tego, jak bardzo wymaga osądu. Agenci są lokalni dla tego projektu (nie globalni) i każdy ma pełną procedurę opisaną we własnym pliku `.claude/agents/<Nazwa>.md` — ten rozdział mówi tylko, **który agent, kiedy i w jakim modelu**, nie powtarza ich instrukcji.
+
+| Agent | Model | Rola | Pomocnicy |
+|---|---|---|---|
+| `VaultExplorer` | Haiku | Wyszukiwanie wyłącznie do odczytu: czy źródło/pojęcie/zettel już istnieje (po nazwie i aliasach), jakie zettle są pod danym pytaniem MOC, lista nieprzetworzonych klipów. Mechaniczne dopasowywanie, tanie i szybkie. | brak |
+| `SourceWriter` | Sonnet | Pisze notatkę źródłową (`input/*`) z surowego materiału wg szablonu i stylu z tego pliku. | `VaultExplorer` |
+| `StoryQuoteExtractor` | Sonnet | Wyodrębnia Story i Cytaty wg `stories-and-quotes.md`. | `VaultExplorer` |
+| `ConceptLinker` | Sonnet | Wykonuje `/link-concepts`: dolinkowuje pojęcia/osoby/firmy, zakłada brakujące notatki strukturalne. | `VaultExplorer` |
+| `ZettelCurator` | Opus | Wykonuje `/make-zettels`: dopasowanie do MOC i wykrywanie duplikatów/kontr jest **semantyczne**, nie leksykalne — błąd tutaj psuje bazę zettli trwale, stąd najmocniejszy model. | `VaultExplorer`, `ConceptLinker` |
+| `JournalAnalyst` | Sonnet | Analizuje **jeden dzień** dziennika dla `/evening-review` (dopasowanie spotkanie→projekt, ukryte zobowiązania) i tylko proponuje — nic nie zapisuje. | `VaultExplorer` |
+| `VaultAuditor` | Opus | Ocenia duplikaty i antytezy zettli dla **jednej grupy obszarów** MOC w `/audit-vault`, tak samo newralgicznie jak `ZettelCurator`. | `VaultExplorer` |
+
+**Kiedy delegować, a kiedy robić inline.** Agent ma sens, gdy jest więcej niż jedna niezależna partia pracy (kilka klipów, kilka źródeł, kilka dni, kilka grup obszarów) albo gdy krok sam w sobie jest na tyle duży/ryzykowny, że warto oddać go modelowi dobranemu do stawki (`ZettelCurator`, `VaultAuditor`). Przy jednej notatce albo drobnej, bezpośredniej prośbie użytkownika („dolinkuj pojęcia w tej notatce") wykonaj krok sam, bez narzutu uruchamiania agenta — skille `link-concepts` i `make-zettels` nadal działają wprost, agent to przyspieszenie, nie wymóg.
+
+**Reguły równoległości:**
+- **Równolegle (jedna wiadomość, wiele wywołań `Agent`)**: `VaultExplorer` dla wielu klipów/notatek naraz; `SourceWriter` dla wielu nowych źródeł naraz; `StoryQuoteExtractor` i `ConceptLinker` **między klipami/źródłami** (ale `ConceptLinker` czeka na swój `StoryQuoteExtractor` w obrębie tego samego klipu); `JournalAnalyst` dla wielu dni naraz; `VaultAuditor` dla wielu grup obszarów naraz.
+- **Zawsze sekwencyjnie**: `ZettelCurator`, jedno źródło po drugim — operuje na współdzielonym stanie (`Moje 12 Problemów`, baza zettli), więc równoległe wywołania mogłyby przeoczyć nawzajem swoje duplikaty albo nadpisać MOC. Z tego samego powodu centralizujesz dedup Todoist w `/evening-review` (po wszystkich `JournalAnalyst`, nie w każdym z osobna).
+- **Nie potrzebuje agenta**: kilka niezależnych, mechanicznych zapisów bez syntezy (np. kilka notatek spotkań z `/calendar-to-journal` tego samego dnia) — wystarczą równoległe wywołania `obsidian create` w tej samej sesji.
+
+**Które skille już to robią.** `process-raw`, `process-book`, `link-concepts`, `make-zettels`, `evening-review`, `calendar-to-journal` i `audit-vault` mają w swoich plikach `.claude/skills/*/SKILL.md` dopisane, które kroki delegują do którego agenta — to tam szukaj dokładnego miejsca w przepływie, nie tutaj.
+
+**Mechanika.** Każdy agent to plik Markdown z frontmatterem `name`, `description`, `model` i `tools` oraz z sekcją „Your place in the team", która wymienia jego pomocników. Lista `Agent(...)` w polu `tools:` musi być zgodna z tą sekcją, żeby uprawnienia agenta i opis jego roli w zespole się nie rozjechały. Przy dodaniu albo zmianie pomocnika aktualizujesz oba miejsca razem, a także kolumnę „Pomocnicy" w tabeli powyżej.
+
 ## Praca z vaultem z poziomu CLI
 
 - **Odczyt, wyszukiwanie, tworzenie i właściwości** obsługujesz skillem `obsidian:obsidian-cli`, a składnię Obsidiana skillem `obsidian:obsidian-markdown`. Pliki `.base` i `.canvas` obsługują `obsidian:obsidian-bases` i `obsidian:json-canvas`. Te skille pochodzą z pluginu `obsidian@obsidian-skills`, który włącza `.claude/settings.json`.

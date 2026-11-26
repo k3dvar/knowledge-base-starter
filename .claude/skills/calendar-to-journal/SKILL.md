@@ -78,6 +78,11 @@ projekt:
 obsidian create path="10 Notatki/<Tytuł>.md" silent content="..."
 ```
 
+Przy kilku spotkaniach danego dnia wyślij wszystkie wywołania `obsidian create` (i towarzyszące
+sprawdzenia/tworzenie notatek osób) **w jednej wiadomości**, równolegle — to niezależne pliki,
+więc nie potrzeba do tego osobnego agenta, wystarczą równoległe wywołania narzędzia w tej samej
+sesji.
+
 ## Krok 3 — Zlinkuj spotkania w dzienniku
 
 Jeśli notatka dzienna nie ma sekcji `### Spotkania`, dopisz ją:
@@ -94,9 +99,9 @@ tylko brakujące pozycje, w kolejności chronologicznej.
 
 ## Krok 4 — Dolinkuj pojęcia
 
-Wywołaj `/link-concepts` na notatkach spotkań z tego przebiegu. Świeże szkielety zwykle nie mają
-nic do zlinkowania i to jest normalne, ale notatki wypełnione przed ponownym uruchomieniem mogą
-już coś zawierać.
+Zleć to agentowi `ConceptLinker`, na notatkach spotkań z tego przebiegu. Świeże szkielety
+zwykle nie mają nic do zlinkowania i to jest normalne, ale notatki wypełnione przed ponownym
+uruchomieniem mogą już coś zawierać.
 
 ## Na koniec
 

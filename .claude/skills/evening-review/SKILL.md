@@ -36,6 +36,15 @@ echo "$(date -v-${i}d +%Y-%m-%d), $(echo 'pon. wt. śr. czw. pt. sob. ndz.' | cu
 
 Plik dziennika to `00 Planer/01 Dziennik/<data>.md`, np. `2026-09-24, czw..md`.
 
+**Delegacja przy kilku dniach.** Gdy zakres obejmuje więcej niż jeden dzień, zleć Kroki 1–3 dla
+**każdego dnia osobno** agentowi `JournalAnalyst` (`.claude/agents/JournalAnalyst.md`), wszystkie
+dni **równolegle** w jednej wiadomości — dni są od siebie niezależne. Agent tylko analizuje
+i proponuje, nic nie zapisuje; Ty zbierasz propozycje ze wszystkich dni, decydujesz (tryb
+interaktywny) albo zapisujesz je wprost do sekcji review (tryb bez nadzoru), i dopiero potem
+wykonujesz Krok 3 (Todoist — scentralizowane wyszukiwanie duplikatów na całym zakresie, nie
+per dzień) i Krok 4. Przy jednym dniu wykonaj Kroki 1–3 inline, bez delegacji — nic tu nie
+zyskujesz na równoległości.
+
 ## Krok 1 — Zbierz notatki
 
 Dla każdego dnia:
@@ -85,9 +94,9 @@ nie twórz projektu bez zgody.
 
 ## Krok 4 — Dolinkuj pojęcia
 
-Wywołaj `/link-concepts` na wszystkich notatkach z Kroku 1, także gdy wyglądają na puste
-szkielety. Wtedy raport po prostu pokaże „brak". Ten krok wykonujesz przed zapisaniem sekcji
-review, żeby jego wynik trafił do niej od razu.
+Zleć to agentowi `ConceptLinker`, na wszystkich notatkach z Kroku 1 (ze wszystkich dni naraz,
+jedno wywołanie), także gdy wyglądają na puste szkielety. Wtedy raport po prostu pokaże „brak".
+Ten krok wykonujesz przed zapisaniem sekcji review, żeby jego wynik trafił do niej od razu.
 
 ## Krok 5 — Sekcja „Wieczorne review"
 

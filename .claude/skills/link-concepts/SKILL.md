@@ -21,6 +21,13 @@ a ten plik opisuje wyłącznie przepływ.
 zakresu dat ani nie szuka notatek sam. Jeśli wejścia brakuje, zapytaj, które notatki
 przeskanować.
 
+**Delegacja.** Gdy ten krok woła inny skill (`process-raw`, `process-book`, `calendar-to-journal`,
+`evening-review`) albo gdy partia notatek jest duża, zleć całość agentowi `ConceptLinker`
+(`.claude/agents/ConceptLinker.md`) zamiast prowadzić poniższe kroki w głównej sesji — on
+wykonuje dokładnie tę samą procedurę, ale równolegle z innymi krokami przepływu. Przy
+bezpośredniej prośbie użytkownika o zlinkowanie jednej, konkretnej notatki („dolinkuj pojęcia
+w tej notatce") możesz wykonać kroki inline, bez narzutu uruchamiania agenta.
+
 ## Krok 1 — Pobierz indeks notatek (raz na całe wywołanie)
 
 ```bash

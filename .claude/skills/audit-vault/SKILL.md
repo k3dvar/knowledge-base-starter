@@ -120,10 +120,13 @@ z pkt 6 „Nowego zettla" w `CLAUDE.md` (kontra pod linią `---`).
    odnotuj brak w raporcie zbiorczo, jako kandydatów do przyszłego szukania kontrargumentu
    w nowych źródłach. Nie wymyślaj kontry spoza vaultu.
 
-Przy dużej bazie (ponad około 150 zettli) możesz rozdzielić krok 1–3 między subagentów, po
-jednym na grupę obszarów. Każdy dostaje tytuły swojej grupy oraz pełną listę tytułów do
-porównań między obszarami i zwraca pary z uzasadnieniem. Każdą zwróconą parę i tak
-weryfikujesz sam, czytając oba zettle.
+Przy dużej bazie (ponad około 150 zettli) rozdziel krok 1–3 między agentów `VaultAuditor`
+(`.claude/agents/VaultAuditor.md`), po jednym **równoległym** wywołaniu na grupę obszarów.
+Każdy dostaje tytuły swojej grupy, pełną listę tytułów do porównań między obszarami i swoją
+część `similarPairs`, i zwraca sklasyfikowane pary (duplikat/antyteza/wsparcie/wspólny temat)
+z uzasadnieniem i gotową treścią kontry. Każdą zwróconą parę i tak weryfikujesz sam, czytając
+oba zettle — raport agenta to twierdzenie do sprawdzenia, nie gotowy wynik. Przy mniejszej
+bazie wykonaj krok 1–3 inline, bez delegacji.
 
 **Tryb pełny** dodaje:
 - czytanie treści (a nie tylko tytułów) wszystkich zettli w obszarach z co najmniej

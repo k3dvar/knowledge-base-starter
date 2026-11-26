@@ -68,19 +68,28 @@ W obu trybach **nie linkuj** jeszcze pojęć i nie dodawaj markerów `#todo/zett
 
 ## Krok 4 — Wyodrębnij Story i Cytaty
 
-Wykonaj procedurę z [stories-and-quotes.md](../process-raw/references/stories-and-quotes.md),
-przekazując notatkę książki i tekst PDF-u z numerami stron albo ręczne notatki. W trybie notatki
-wyodrębniaj tylko to, co faktycznie w niej zapisano, i nie udawaj dostępu do całej książki.
+Zleć to agentowi `StoryQuoteExtractor`, przekazując notatkę książki i tekst PDF-u z numerami
+stron albo ręczne notatki — wykonuje procedurę z
+[stories-and-quotes.md](../process-raw/references/stories-and-quotes.md) samodzielnie. W trybie
+notatki ma wyodrębniać tylko to, co faktycznie w niej zapisano, i nie udawać dostępu do całej
+książki.
 
 ## Krok 5 — Dolinkuj zapisane materiały
 
-Wywołaj `/link-concepts` na notatce książki oraz utworzonych lub uzupełnionych Story i Cytatach.
-Zrób to przed pokazaniem tabeli zettli.
+Zleć to agentowi `ConceptLinker`, na notatce książki oraz utworzonych lub uzupełnionych Story
+i Cytatach. Zrób to przed pokazaniem tabeli zettli, i dopiero po zakończeniu Kroku 4.
 
 ## Krok 6 — Zaproponuj zettle
 
-Wywołaj `/make-zettels <Tytuł notatki książki>`. Przy tak obszernym źródle `/make-zettels`
-śmielej proponuje nowy obszar w MOC. Zettle zapisuje i dolinkowuje on sam, po akceptacji.
+Zleć to agentowi `ZettelCurator`, na notatce książki. Przy tak obszernym źródle ma śmielej
+proponować nowy obszar w MOC. Zettle zapisuje i dolinkowuje on sam, po akceptacji.
+
+## Agenci
+
+Krok 2 i Krok 3 wymagają trzymania kontekstu całej książki w jednej, ciągłej sesji (czytanie
+fragment po fragmencie i dopisywanie do tej samej notatki), więc zostają inline — nie nadają
+się do delegacji. Krok 4–6 deleguj jak wyżej; przy przetwarzaniu więcej niż jednej książki
+naraz traktuj je jak osobne klipy w `process-raw` i stosuj tam opisaną równoległość.
 
 ## Na koniec
 
