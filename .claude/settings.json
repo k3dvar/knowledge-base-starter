@@ -10,5 +10,7 @@
   "enabledPlugins": {
     "obsidian@obsidian-skills": true
   },
+  "model": "claude-opus-5-5",
+  "advisorModel": "opus",
   "language": "polish"
 }
